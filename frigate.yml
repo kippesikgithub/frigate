@@ -7,7 +7,7 @@ cameras:
   frigate_voordeur:
     ffmpeg:
       inputs:
-        - path: rtsp://<user>:<passwd>@192.168.111.198:88/videoMain
+        - path: rtsp://<user>:<passwd>@192.168.0.xxx:88/videoMain
           roles:
             - record
             - detect
@@ -38,7 +38,7 @@ cameras:
   frigate_oprit:
     ffmpeg:
       inputs:
-        - path: rtsp://<user>:<passwd>@192.168.111.193:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+        - path: rtsp://<user>:<passwd>@192.168.0.xxx:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
           roles:
             - record
             - detect
