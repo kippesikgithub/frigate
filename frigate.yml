@@ -1,0 +1,87 @@
+mqtt:
+  host: <mqtt IP>
+  user: mqtt_frigate
+  password: <!mqtt_frigate_password>
+  topic_prefix: frigate
+cameras:
+  frigate_voordeur:
+    ffmpeg:
+      inputs:
+        - path: rtsp://<user>:<passwd>@192.168.111.198:88/videoMain
+          roles:
+            - record
+            - detect
+            - rtmp
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
+    motion:
+      mask:
+        - 1280,0,0,0,0,720,260,720,490,588,576,602,708,488,830,497,787,626,1280,624
+    objects:
+      track:
+        - person
+    snapshots:
+      enabled: True
+      timestamp: false
+      bounding_box: true
+      crop: False
+      retain:
+        default: 3
+    mqtt:
+      timestamp: False
+      bounding_box: False
+      crop: True
+      quality: 100
+      height: 500
+  frigate_oprit:
+    ffmpeg:
+      inputs:
+        - path: rtsp://<user>:<passwd>@192.168.111.193:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+          roles:
+            - record
+            - detect
+            - rtmp
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
+    motion:
+      mask:
+        - 210,208,252,720,0,720,0,261,0,0,226,0,1280,0,1280,462,556,167
+    objects:
+      track:
+        - person
+    snapshots:
+      enabled: True
+      timestamp: false
+      bounding_box: true
+      crop: False
+      retain:
+        default: 3
+    mqtt:
+      timestamp: False
+      bounding_box: False
+      crop: True
+      quality: 100
+      height: 500
+record:
+  enabled: true
+  retain:
+    days: 3
+    mode: motion
+  events:
+    retain:
+      default: 3  
+      mode: active_objects
+detectors: 
+  coral:
+    type: edgetpu
+    device: usb
+    
+#cpu detection
+#    cpu1:
+#      type: cpu
+#    cpu2:
+#      type: cpu
