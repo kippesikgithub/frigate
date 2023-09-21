@@ -1,17 +1,31 @@
+go2rtc:
+  streams:
+    frigate_voordeur:
+      - rtsp://IP:poort/voordeur
+    frigate_oprit:
+      - rtsp://IP:poort/oprit
+    frigate_vogelhuis:
+      - rtsp://IP:poort/vogelhuis
+  webrtc:
+    candidates:
+      - IP:8560
+      - stun:8560
+birdseye:
+  enabled: True
+  mode: continuous
 mqtt:
-  host: <mqtt IP>
+  host: IP
   user: mqtt_frigate
-  password: <!mqtt_frigate_password>
+  password: <password>
   topic_prefix: frigate
 cameras:
   frigate_voordeur:
     ffmpeg:
       inputs:
-        - path: rtsp://<user>:<passwd>@192.168.0.xxx:88/videoMain
+        - path: rtsp://IP:poort/voordeur
           roles:
             - record
             - detect
-            - rtmp
     detect:
       width: 1280
       height: 720
@@ -38,21 +52,50 @@ cameras:
   frigate_oprit:
     ffmpeg:
       inputs:
-        - path: rtsp://<user>:<passwd>@192.168.0.xxx:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+        - path: rtsp://IP:poort/oprit
           roles:
             - record
             - detect
-            - rtmp
     detect:
       width: 1280
       height: 720
       fps: 5
     motion:
       mask:
-        - 210,208,252,720,0,720,0,261,0,0,226,0,1280,0,1280,462,556,167
+        - 301,161,312,720,0,720,0,261,0,0,226,0,1280,0,1280,425,712,128
     objects:
       track:
         - person
+    snapshots:
+      enabled: True
+      timestamp: false
+      bounding_box: true
+      crop: False
+      retain:
+        default: 3
+    mqtt:
+      timestamp: False
+      bounding_box: False
+      crop: True
+      quality: 100
+      height: 500
+  frigate_vogelhuis:
+    ffmpeg:
+      inputs:
+        - path: rtsp://IP:poort/vogelhuis
+          roles:
+            - record
+            - detect
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
+    motion:
+      mask:
+        - 1280,720,1280,0,0,0,0,720,568,720,413,604,412,45,928,46,913,618,762,720
+    objects:
+      track:
+        - bird
     snapshots:
       enabled: True
       timestamp: false
@@ -78,10 +121,4 @@ record:
 detectors: 
   coral:
     type: edgetpu
-    device: usb
-    
-#cpu detection
-#    cpu1:
-#      type: cpu
-#    cpu2:
-#      type: cpu
+    device: pci:0
